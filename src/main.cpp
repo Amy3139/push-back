@@ -8,12 +8,12 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {1, 2, 3},     // Left Chassis Ports (negative port will reverse it!)
-    {-4, -5, -6},  // Right Chassis Ports (negative port will reverse it!)
+    {-2, -3, -4},     // Left Chassis Ports (negative port will reverse it!)
+    {5, 6, 7},  // Right Chassis Ports (negative port will reverse it!)
 
-    7,      // IMU Port
-    4.125,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    343);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+    9,      // IMU Port
+    2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
+    600);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
@@ -58,20 +58,26 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Drive\n\nDrive forward and come back", drive_example},
-      {"Turn\n\nTurn 3 times.", turn_example},
-      {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
-      {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
-      {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
-      {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
-      {"Combine all 3 movements", combining_movements},
-      {"Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
-      {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
-      {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
-      {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
-      {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
-      {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      {"AWP Right 2\n\nAWP for right side", awp_right_2},
+      {"AWP Right 1\n\nAWP for right side", awp_right_1},
+      {"AWP Left 1\n\nAWP for left side", awp_left_1},
+      {"AWP Left 2\n\nAWP for left side", awp_left_2},
+
+      // Examples from EZ-Templates. Comment out for tournament to prevent mis-selection.
+      {"Example: Drive\n\nDrive forward and come back", drive_example},
+      {"Example: Turn\n\nTurn 3 times.", turn_example},
+      {"Example: Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
+      {"Example: Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
+      {"Example: Swing Turn\n\nSwing in an 'S' curve", swing_example},
+      {"Example: Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
+      {"Example: Combine all 3 movements", combining_movements},
+      {"Example: Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
+      {"Example: Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
+      {"Example: Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
+      {"Example: Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
+      {"Example: Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
+      {"Example: Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
+      {"Example: Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
   // Initialize chassis and auton selector
@@ -209,7 +215,8 @@ void ez_template_extras() {
       chassis.pid_tuner_toggle();
 
     // Trigger the selected autonomous routine
-    if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
+    // if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
+    if (master.get_digital(DIGITAL_DOWN)) {
       pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
       autonomous();
       chassis.drive_brake_set(preference);
@@ -243,19 +250,55 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
+  bool scraper_toggle_btn_pressed = false;
+  bool scraper_toggle_btn_pressing = false;
+
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
 
-    chassis.opcontrol_tank();  // Tank control
+    // # Joystick control
+    //
+    // chassis.opcontrol_tank();  // Tank control
     // chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
+    chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
     // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
 
     // . . .
     // Put more user control code here!
     // . . .
+
+    // # Intake control
+    //
+    if (master.get_digital(DIGITAL_R1)) {
+      intake.move(-127);
+    } 
+    else if (master.get_digital(DIGITAL_R2)) {
+      intake.move(127);
+    } 
+    else {
+      intake.move(0);
+    }
+
+    // # Raiser control
+    //
+    if (master.get_digital(DIGITAL_L1)) {
+      raiser.move(100);
+    } 
+    else if (master.get_digital(DIGITAL_L2)) {
+      raiser.move(-100);
+    } 
+    else {
+      raiser.move(0);
+    }
+
+    // # Scraper control
+    scraper_toggle_btn_pressing = master.get_digital(DIGITAL_X);
+    if (scraper_toggle_btn_pressing && !scraper_toggle_btn_pressed) {
+      scraper.set(!scraper.get());
+    }
+    scraper_toggle_btn_pressed = scraper_toggle_btn_pressing;
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

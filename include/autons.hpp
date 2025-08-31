@@ -1,7 +1,21 @@
 #pragma once
 
+// Speed constants (out of 127) - can be used across multiple files
+extern const int DRIVE_SPEED;
+extern const int TURN_SPEED;
+extern const int SWING_SPEED;
+
 void default_constants();
 
+// Our Autonomous functions
+void awp_right_1();
+void awp_right_2();
+void awp_left_1();
+void awp_left_2();
+
+
+
+// Autonomous function examples from EZ-Template. Keeping as reference.
 void drive_example();
 void turn_example();
 void drive_and_turn();

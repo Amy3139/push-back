@@ -5,7 +5,7 @@
 // https://ez-robotics.github.io/EZ-Template/
 /////
 
-// These are out of 127
+// Speed constants (out of 127) - defined here for use across multiple files
 const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
