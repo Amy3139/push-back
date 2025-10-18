@@ -58,6 +58,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Skills 1\n\nSkills for driving onto park zone", skills_1},
       {"AWP Right 2\n\nAWP for right side", awp_right_2},
       {"AWP Right 1\n\nAWP for right side", awp_right_1},
       {"AWP Left 1\n\nAWP for left side", awp_left_1},
@@ -259,9 +260,9 @@ void opcontrol() {
 
     // # Joystick control
     //
-    // chassis.opcontrol_tank();  // Tank control
+    chassis.opcontrol_tank();  // Tank control
     // chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
+    //chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
     // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
 
@@ -271,10 +272,10 @@ void opcontrol() {
 
     // # Intake control
     //
-    if (master.get_digital(DIGITAL_R1)) {
+    if (master.get_digital(DIGITAL_L1)) {
       intake.move(-127);
     } 
-    else if (master.get_digital(DIGITAL_R2)) {
+    else if (master.get_digital(DIGITAL_L2)) {
       intake.move(127);
     } 
     else {
@@ -283,14 +284,15 @@ void opcontrol() {
 
     // # Raiser control
     //
-    if (master.get_digital(DIGITAL_L1)) {
+    if (master.get_digital(DIGITAL_R1)) {
       raiser.move(100);
     } 
-    else if (master.get_digital(DIGITAL_L2)) {
+    else if (master.get_digital(DIGITAL_R2)) {
       raiser.move(-100);
     } 
     else {
       raiser.move(0);
+      raiser.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     }
 
     // # Scraper control
