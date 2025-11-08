@@ -22,9 +22,11 @@ void awp_right_2() {
   raiser.stop();
 
   // #2. Outtake 3 balls into center goal
+  
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait();
 
+  raiser.raise(25);
   chassis.pid_drive_set(14_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
@@ -74,5 +76,5 @@ void awp_right_2() {
   chassis.pid_drive_set(10_in, 50, true);
   chassis.pid_wait();
   intaker.outtake(127);
-  pros::delay(1000); 
+  pros::delay(2000);
 }
