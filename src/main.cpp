@@ -15,6 +15,12 @@ ez::Drive chassis(
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     600);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
+// Subsystem objects
+Descorer descorer;
+Intaker intaker;
+Raiser raiser;
+Scraper scraper;
+
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
 //  - you should get positive values on the encoders going FORWARD and RIGHT
@@ -58,8 +64,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Skills 1\n\nSkills for driving onto park zone", skills_1},
       {"AWP Right 2\n\nAWP for right side", awp_right_2},
+      {"Skills 1\n\nSkills for driving onto park zone", skills_1},
       {"AWP Right 1\n\nAWP for right side", awp_right_1},
       {"AWP Left 1\n\nAWP for left side", awp_left_1},
       {"AWP Left 2\n\nAWP for left side", awp_left_2},
@@ -121,11 +127,15 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+  std::uint32_t start_time_ms = pros::millis();
+
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
+
+  raiser.set_brake_mode(MOTOR_BRAKE_HOLD);
 
   /*
   Odometry and Pure Pursuit are not magic
@@ -141,6 +151,10 @@ void autonomous() {
   */
 
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+
+  std::uint32_t elapsed_time_ms = pros::millis() - start_time_ms;
+  printf("End: elapsed time: %u ms\n", elapsed_time_ms);
+  pros::lcd::print(7, "End: elapsed time: %d ms", elapsed_time_ms);
 }
 
 /**
@@ -250,9 +264,8 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-
-  bool scraper_toggle_btn_pressed = false;
-  bool scraper_toggle_btn_pressing = false;
+  // raiser.set_brake_mode(MOTOR_BRAKE_COAST);
+  raiser.set_brake_mode(MOTOR_BRAKE_HOLD);
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
@@ -270,37 +283,10 @@ void opcontrol() {
     // Put more user control code here!
     // . . .
 
-    // # Intake control
-    //
-    if (master.get_digital(DIGITAL_L1)) {
-      intake.move(-127);
-    } 
-    else if (master.get_digital(DIGITAL_L2)) {
-      intake.move(127);
-    } 
-    else {
-      intake.move(0);
-    }
-
-    // # Raiser control
-    //
-    if (master.get_digital(DIGITAL_R1)) {
-      raiser.move(100);
-    } 
-    else if (master.get_digital(DIGITAL_R2)) {
-      raiser.move(-100);
-    } 
-    else {
-      raiser.move(0);
-      raiser.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    }
-
-    // # Scraper control
-    scraper_toggle_btn_pressing = master.get_digital(DIGITAL_X);
-    if (scraper_toggle_btn_pressing && !scraper_toggle_btn_pressed) {
-      scraper.set(!scraper.get());
-    }
-    scraper_toggle_btn_pressed = scraper_toggle_btn_pressing;
+    descorer_opcontrol(); // # Descorer control
+    intaker_opcontrol(); // # Intake control
+    raiser_opcontrol(); // # Raiser control
+    scraper_opcontrol(); // # Scraper control
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
