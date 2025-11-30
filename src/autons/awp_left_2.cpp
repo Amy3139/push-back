@@ -25,33 +25,34 @@ void awp_left_2() {
   chassis.pid_turn_set(45_deg, TURN_SPEED);
   chassis.pid_wait();
   raiser.raise(100);
-  chassis.pid_drive_set(14_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(16_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   raiser.stop();
   intaker.outtake(80);
-  pros::delay(1500);
+  pros::delay(1200);
   intaker.stop();
 
   // #3. Intake 2 balls under long goal
-  chassis.pid_drive_set(-22_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-23_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   chassis.pid_turn_set(-38_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  raiser.lower(25);
+  raiser.lower(50);
   intaker.intake(127);
 
   chassis.pid_drive_set(18_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(6_in, 25, true);
+  chassis.pid_drive_set(3_in, 30, true);
   chassis.pid_wait();
-  intaker.stop();
+  pros::delay(1000);
 
   // #4. Outake balls into long goal
-  chassis.pid_drive_set(-20_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-18_in, DRIVE_SPEED, true);
   chassis.pid_wait();
+  intaker.stop();
 
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -59,10 +60,10 @@ void awp_left_2() {
   chassis.pid_drive_set(-11_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-100_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(19_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(18_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   chassis.pid_turn_set(0_deg, TURN_SPEED);
@@ -76,3 +77,4 @@ void awp_left_2() {
   intaker.outtake(127);
   pros::delay(1000); 
 }
+
