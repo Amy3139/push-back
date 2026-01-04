@@ -1,6 +1,6 @@
 #include "main.h"
 
-inline ez::Piston descorerPiston('E');
+inline ez::Piston descorerPiston('E', true);
 
 bool descorer_toggle_btn_pressed = false;
 bool descorer_toggle_btn_pressing = false;

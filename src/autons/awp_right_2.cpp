@@ -2,7 +2,7 @@
 #include "subsystems.hpp"
 
 ///
-// AWP right side
+// AWP right side: center goal then long goal (no loader)
 ///
 void awp_right_2() {
   // #1. Get 3 balls

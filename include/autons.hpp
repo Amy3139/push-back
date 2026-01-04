@@ -7,14 +7,15 @@ extern const int SWING_SPEED;
 
 void default_constants();
 
+// Our Autonomous test functions
+void test();
+
 // Our Autonomous functions
 void awp_right_1();
 void awp_right_2();
 void awp_left_1();
 void awp_left_2();
 void skills_1();
-
-
 
 // Autonomous function examples from EZ-Template. Keeping as reference.
 void drive_example();
