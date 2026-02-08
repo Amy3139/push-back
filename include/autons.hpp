@@ -15,7 +15,9 @@ void awp_right_1();
 void awp_right_2();
 void awp_left_1();
 void awp_left_2();
+void awp_left_3();
 void skills_1();
+void skills_2();
 
 // Autonomous function examples from EZ-Template. Keeping as reference.
 void drive_example();
