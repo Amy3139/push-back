@@ -10,7 +10,7 @@ void default_constants();
 // Our Autonomous test functions
 void test();
 
-// Our Autonomous functions
+// Our Autonomous routine functions
 void awp_right_1();
 void awp_right_2();
 void awp_left_1();
@@ -18,6 +18,10 @@ void awp_left_2();
 void awp_left_3();
 void skills_1();
 void skills_2();
+
+// Our Autonomous helper functions
+void distance_with_oscillation(double hold_distance, double hold_time, double max_speed = 50);
+void drive_to_distance(double distance, double max_time, double max_speed = 50);
 
 // Autonomous function examples from EZ-Template. Keeping as reference.
 void drive_example();

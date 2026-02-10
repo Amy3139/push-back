@@ -1,4 +1,5 @@
 #include "main.h"
+#include "pros/motors.h"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -20,6 +21,8 @@ Descorer descorer;
 Intaker intaker;
 Raiser raiser;
 Scraper scraper;
+
+okapi::DistanceSensor distanceSensor(19);
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
@@ -65,11 +68,11 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       // {"Test", test},
+      {"AWP Left 1\n\nAWP for left side", awp_left_1},
       {"AWP Left 3\n\nScores 7 blocks in 3 goals", awp_left_3},
       {"AWP Left 2\n\nAWP for left side", awp_left_2},
       {"Skills 2\n\nSkills for driving onto park zone", skills_2},
       {"AWP Right 2\n\nAWP for right side", awp_right_2},
-      {"AWP Left 1\n\nAWP for left side", awp_left_1},
       {"Skills 1\n\nSkills for scoring blocks and parking", skills_1},
       {"AWP Right 1\n\nAWP for right side", awp_right_1},
 
@@ -136,9 +139,9 @@ void autonomous() {
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
-  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
-  raiser.set_brake_mode(MOTOR_BRAKE_HOLD);
+  // chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
+  // raiser.set_brake_mode(MOTOR_BRAKE_HOLD);
 
   /*
   Odometry and Pure Pursuit are not magic
@@ -157,7 +160,7 @@ void autonomous() {
 
   std::uint32_t elapsed_time_ms = pros::millis() - start_time_ms;
   printf("End: elapsed time: %u ms\n", elapsed_time_ms);
-  pros::lcd::print(7, "End: elapsed time: %d ms", elapsed_time_ms);
+  pros::lcd::print(4, "End: elapsed time: %d ms", elapsed_time_ms);
 }
 
 /**
@@ -179,6 +182,8 @@ void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int lin
  * and will help you debug problems you're having
  */
 void ez_screen_task() {
+  // static int controller_update_counter = 0;
+
   while (true) {
     // Only run this when not connected to a competition switch
     if (!pros::competition::is_connected()) {
@@ -199,6 +204,17 @@ void ez_screen_task() {
           screen_print_tracker(chassis.odom_tracker_front, "f", 7);
         }
       }
+      // ez::screen_print("distance: " + util::to_string_with_precision(distanceSensor.get()), 8);  // Print distance sensor value
+      // pros::lcd::print(6, "Left: %.1f, Right: %.1f", chassis.drive_velocity_left(), chassis.drive_velocity_right());
+      pros::lcd::print(7, "Dist: %.1f mm, L: %.1f, R: %.1f", 
+        distanceSensor.get(), chassis.drive_velocity_left(), chassis.drive_velocity_right());
+
+      // Value is only displayed on the controller once then doesn't change
+      // master.print(0, 0, "Distance: %.2f", distanceSensor.get());
+      // if (controller_update_counter % 5 == 0) {
+      //   master.print(0, 0, "Distance: %.2f", distanceSensor.get());
+      // }
+      // controller_update_counter++;
     }
 
     // Remove all blank pages when connected to a comp switch
