@@ -48,7 +48,7 @@ void awp_left_1() {
   chassis.pid_wait();
   intaker.intake(80);
   chassis.pid_drive_set(16_in, DRIVE_SPEED, true);
-  raiser.lower(75);
+  raiser.lower(50);
   chassis.pid_wait();
   chassis.pid_drive_set(8_in, 25, true);
   chassis.pid_wait();
@@ -60,5 +60,5 @@ void awp_left_1() {
   chassis.pid_drive_set(19_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   intaker.outtake(127);
-  pros::delay(500);  // Wait for raiser to raise
+  pros::delay(1000);  // Wait for raiser to raise
 }

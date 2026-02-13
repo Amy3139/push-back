@@ -11,16 +11,18 @@ void default_constants();
 void test();
 
 // Our Autonomous routine functions
-void awp_right_1();
-void awp_right_2();
+void awp_1(bool run_right_side = false);
 void awp_left_1();
 void awp_left_2();
 void awp_left_3();
+void awp_right_1();
+void awp_right_2();
 void skills_1();
 void skills_2();
+void skills_3();
 
 // Our Autonomous helper functions
-void distance_with_oscillation(double hold_distance, double hold_time, double max_speed = 50);
+void distance_with_oscillation(double hold_distance, double hold_time, double max_speed = 50, double delta = 25);
 void drive_to_distance(double distance, double max_time, double max_speed = 50);
 
 // Autonomous function examples from EZ-Template. Keeping as reference.

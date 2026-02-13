@@ -1,10 +1,10 @@
 #include "main.h"
 #include "pros/motors.h"
 
-void distance_with_oscillation(double hold_distance, double hold_time, double max_speed) {
+void distance_with_oscillation(double hold_distance, double hold_time, double max_speed, double delta) {
 
     double kP = 0.8;
-    double delta = 25;  // mm to oscillate
+    // double delta = 25;  // mm to oscillate
     uint32_t oscillate_period = 500;  // ms per half cycle
     
     uint32_t elapsed = 0;
@@ -12,7 +12,7 @@ void distance_with_oscillation(double hold_distance, double hold_time, double ma
     uint32_t last_toggle = startTime;
     bool moving_forward = true;
     
-    pros::lcd::print(6, "HD: %.1f, CD: %.1f, Elapsed: %.1f", hold_distance, distanceSensor.get(), elapsed);
+    // pros::lcd::print(6, "HD: %.1f, CD: %.1f, Elapsed: %.1f", hold_distance, distanceSensor.get(), elapsed);
     while (elapsed < hold_time) {
 
         // Toggle target distance every oscillate_period ms
@@ -37,13 +37,13 @@ void distance_with_oscillation(double hold_distance, double hold_time, double ma
 
             chassis.drive_set(speed, speed);
 
-            pros::lcd::print(5, "HD: %.1f, CD: %.1f, E: %.1f, O: %.1f, S: %.1f, in loop", hold_distance, current, error, output, speed);
+            // pros::lcd::print(5, "HD: %.1f, CD: %.1f, E: %.1f, O: %.1f, S: %.1f, in loop", hold_distance, current, error, output, speed);
             // pros::lcd::print(5, "D: %.1f, E: %.1f, O: %.1f, S: %.1f", current, error, output, speed);
         }
 
         pros::delay(20);
         elapsed = pros::millis() - startTime;
-        pros::lcd::print(6, "HD: %.1f, CD: %.1f, Elapsed: %.1f, in loop", hold_distance, current, elapsed);
+        // pros::lcd::print(6, "HD: %.1f, CD: %.1f, Elapsed: %.1f, in loop", hold_distance, current, elapsed);
         // pros::lcd::print(6, "Elapsed: %.1f, Distance: %.1f, in loop", elapsed, distanceSensor.get());
     }
 }

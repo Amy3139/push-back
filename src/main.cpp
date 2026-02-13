@@ -69,12 +69,13 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       // {"Test", test},
       {"AWP Left 1\n\nAWP for left side", awp_left_1},
+      {"AWP Right 1\n\nAWP for right side", awp_right_1},
       {"AWP Left 3\n\nScores 7 blocks in 3 goals", awp_left_3},
       {"AWP Left 2\n\nAWP for left side", awp_left_2},
       {"Skills 2\n\nSkills for driving onto park zone", skills_2},
       {"AWP Right 2\n\nAWP for right side", awp_right_2},
       {"Skills 1\n\nSkills for scoring blocks and parking", skills_1},
-      {"AWP Right 1\n\nAWP for right side", awp_right_1},
+      {"Skills 3\n\nStart with loader, scoring blocks and parking", skills_3},
 
       // Examples from EZ-Templates. Comment out for tournament to prevent mis-selection.
       {"Example: Drive\n\nDrive forward and come back", drive_example},
