@@ -51,7 +51,7 @@ void distance_with_oscillation(double hold_distance, double hold_time, double ma
 void drive_to_distance(double distance, double max_time, double max_speed) {
 
     double kP = 0.8;
-    double error_threshold = 5;  // mm
+    double error_threshold = 10;  // mm
     uint32_t elapsed = 0;
     uint32_t startTime = pros::millis();
     double current = distanceSensor.get();
