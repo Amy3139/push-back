@@ -11,7 +11,7 @@ void awp_left_1() {
   // # 1. Drive to loader
   // #
   raiser.lower(75);
-  scraper.open();  chassis.pid_drive_set(30_in, DRIVE_SPEED, true);
+  scraper.open();  chassis.pid_drive_set(31_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   chassis.pid_turn_set(-89_deg, TURN_SPEED * 0.9);
@@ -20,7 +20,7 @@ void awp_left_1() {
   // # 2. Outtake from loader
   // #
   intaker.intake(127);
-  distance_with_oscillation(195, 3400, 30);
+  distance_with_oscillation(190, 3500, 50, 35);
   chassis.pid_drive_set(-12_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   intaker.stop();
@@ -38,7 +38,7 @@ void awp_left_1() {
   // pros::delay(1800);  // Wait for balls to outtake.
   pros::delay(1500);  // Wait for balls to outtake. Save time
   intaker.stop();
-
+return;
   // # 4. Drive to intake balls at center
   // #
   chassis.pid_drive_set(-10_in, 50, true);
