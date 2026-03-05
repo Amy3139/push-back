@@ -48,6 +48,50 @@ void distance_with_oscillation(double hold_distance, double hold_time, double ma
     }
 }
 
+void oscillate_between(double forward_distance, double backward_distance, double forward_max_speed, double backward_max_speed, double max_time, int num_oscillations) {
+    double kP = 0.8;
+    double reach_threshold = 10;  // mm to consider target reached
+    uint32_t max_time_per_oscillation = (num_oscillations > 0) ? (uint32_t)(max_time / num_oscillations) : 0;
+
+    uint32_t elapsed = 0;
+    uint32_t startTime = pros::millis();
+    uint32_t last_toggle = startTime;
+    bool moving_forward = true;
+    int oscillations = 0;
+
+    while (elapsed < max_time && (num_oscillations == -1 || oscillations < num_oscillations)) {
+        double target_distance = moving_forward ? forward_distance : backward_distance;
+        double current = distanceSensor.get();
+
+        if (current > 0) {  // valid reading
+            double error = current - target_distance;
+
+            uint32_t time_in_oscillation = pros::millis() - last_toggle;
+            bool reached = fabs(error) < reach_threshold;
+            bool timed_out = max_time_per_oscillation > 0 && time_in_oscillation >= max_time_per_oscillation;
+
+            // Switch direction when target is reached or oscillation timed out
+            if (reached || timed_out) {
+                if (!moving_forward) pros::delay(50);  // pause at backward_distance
+                moving_forward = !moving_forward;
+                last_toggle = pros::millis();
+                oscillations++;
+            }
+
+            double max_speed = moving_forward ? forward_max_speed : backward_max_speed;
+            double speed = kP * error;
+            if (fabs(error) < 5) speed = 0;
+            if (speed > max_speed) speed = max_speed;
+            else if (speed < -max_speed) speed = -max_speed;
+
+            chassis.drive_set(speed, speed);
+        }
+
+        pros::delay(20);
+        elapsed = pros::millis() - startTime;
+    }
+}
+
 void drive_to_distance(double distance, double max_time, double max_speed) {
 
     double kP = 0.8;

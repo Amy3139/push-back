@@ -14,7 +14,12 @@ void test_outtake_from_loader_with_distance_sensor() {
   // pros::delay(500);
 
   // drive_to_distance(195, 3000, 50);
-  distance_with_oscillation(195, 3500, 50, 35);
+  // distance_with_oscillation(200, 3500, 30, 30);
+  // pros::delay(300);
+
+  // oscillate_between(200, 250, 30, 30, 3500);
+  drive_to_distance(200, 500, 50);
+  oscillate_between(200, 250, 30, 30, 2500);
 return;
   chassis.pid_drive_set(-12_in, DRIVE_SPEED, true);
   chassis.pid_wait();

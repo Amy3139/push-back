@@ -16,7 +16,9 @@ void awp_right_2() {
 
   raiser.lower(25);
   intaker.intake(127);
-  chassis.pid_drive_set(17_in, 30, true);
+  chassis.pid_drive_set(8_in, 40, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(10_in, 30, true);
   chassis.pid_wait();
   // chassis.pid_drive_set(8_in, 20, true);
   // chassis.pid_wait();
@@ -50,7 +52,9 @@ void awp_right_2() {
   scraper.open();  
   raiser.lower(75);
   intaker.intake(127);
-  distance_with_oscillation(195, 3600, 50, 40);
+  // distance_with_oscillation(195, 3600, 50, 40);
+  drive_to_distance(200, 500, 50);
+  oscillate_between(200, 250, 30, 30, 2500);
 
   //
   // # 4. Outtake to long goal
@@ -70,88 +74,10 @@ void awp_right_2() {
   chassis.pid_wait();
 
   raiser.raise(127);
-  pros::delay(1000);  // Wait for raiser to raise
-  chassis.pid_drive_set(14_in, 75, true);
+  pros::delay(500);  // Wait for raiser to raise
+  chassis.pid_drive_set(15_in, 75, true);
   chassis.pid_wait();
   intaker.outtake(127);
-  pros::delay(1500);  // Wait for balls to outtake. Save time
+  pros::delay(1800);  // Wait for balls to outtake. Save time
   intaker.stop();
-}
-
-///
-// AWP right side: center goal then long goal (no loader)
-///
-void awp_right_2_old() {
-  // #1. Get 3 balls
-  chassis.pid_drive_set(11_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  raiser.lower(25);
-  intaker.intake(127);
-  chassis.pid_drive_set(8_in, 30, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(8_in, 20, true);
-  chassis.pid_wait();
-
-  raiser.stop();
-
-  // #2. Outtake 3 balls into center goal
-  
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  raiser.raise(25);
-  chassis.pid_drive_set(14_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  raiser.stop();
-  intaker.outtake(80);
-  pros::delay(1500);
-  intaker.stop();
-
-  // #3. Intake 2 balls under long goal
-  chassis.pid_drive_set(-22_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(38_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  raiser.lower(25);
-  intaker.intake(127);
-
-  chassis.pid_drive_set(18_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(6_in, 25, true);
-  chassis.pid_wait();
-  intaker.stop();
-
-  // #4. Outake balls into long goal
-  chassis.pid_drive_set(-20_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-11_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(18_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  raiser.raise(127);
-  pros::delay(1000);  // Wait for raiser to raise
-
-  chassis.pid_drive_set(10_in, 50, true);
-  chassis.pid_wait();
-  intaker.outtake(127);
-  pros::delay(2000);
 }
