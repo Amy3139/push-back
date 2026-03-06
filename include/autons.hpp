@@ -25,6 +25,7 @@ void skills_3();
 void distance_with_oscillation(double hold_distance, double hold_time, double max_speed = 50, double delta = 25);
 void oscillate_between(double forward_distance, double backward_distance, double forward_max_speed = 50, double backward_max_speed = 50, double max_time = 3500, int num_oscillations = -1);
 void drive_to_distance(double distance, double max_time, double max_speed = 50);
+double calc_distance_from_wall(double distance_from_wall_cm);
 
 // Autonomous function examples from EZ-Template. Keeping as reference.
 void drive_example();

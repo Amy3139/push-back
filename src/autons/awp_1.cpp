@@ -2,7 +2,7 @@
 #include "main.h"
 
 /*
- * AWP: 
+ * AWP: Loader first
  *  1. loader, 
  *  2. long goal, 
  *  3. then center goal
@@ -38,14 +38,9 @@ void awp_1(bool run_right_side) {
    * And the distance from wall after moving back was around 563 mm
   */
 
-  static const double distance_from_wall_to_turn = 560;
-  double distance_from_wall = distanceSensor.get();
-  double distance_to_move_back_mm = (distance_from_wall_to_turn - distance_from_wall);
-  double distance_to_move_back_in = distance_to_move_back_mm / 25.4;
-
   double before_move_back = distanceSensor.get();
 
-  // chassis.pid_drive_set(-12_in, DRIVE_SPEED, true);
+  double distance_to_move_back_in = calc_distance_from_wall(560);
   chassis.pid_drive_set(-(distance_to_move_back_in), DRIVE_SPEED, true);
   scraper.close(); // close scraper earlier to prevent ball getting darg during turn
   chassis.pid_wait();
@@ -65,8 +60,12 @@ void awp_1(bool run_right_side) {
   pros::delay(500);  // Wait for raiser to raise
   chassis.pid_drive_set(15_in, 75, true);
   chassis.pid_wait();
+  // intaker.outtake(127);
+  // pros::delay(1500);  // Wait for balls to outtake.
+  intaker.outtake(100); // start slower to increase chance of call staying in goal
+  pros::delay(200);
   intaker.outtake(127);
-  pros::delay(1500);  // Wait for balls to outtake.
+  pros::delay(800);
   intaker.stop();
 
   /// ### 4. Drive to intake balls at center ###

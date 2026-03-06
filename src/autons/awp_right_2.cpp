@@ -54,13 +54,10 @@ void awp_right_2() {
   //
   // # 4. Outtake to long goal
   // #
-  static const double distance_from_wall_to_turn = 560;
-  double distance_from_wall = distanceSensor.get();
-  double distance_to_move_back_mm = (distance_from_wall_to_turn - distance_from_wall);
-  double distance_to_move_back_in = distance_to_move_back_mm / 25.4;
 
-  double before_move_back = distanceSensor.get();
+  // double before_move_back = distanceSensor.get();
 
+  double distance_to_move_back_in = calc_distance_from_wall(560);
   chassis.pid_drive_set(-(distance_to_move_back_in), DRIVE_SPEED, true);
   scraper.close(); // close scraper earlier to prevent ball getting darg during turn
   chassis.pid_wait();

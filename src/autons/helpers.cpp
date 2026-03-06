@@ -126,3 +126,10 @@ void drive_to_distance(double distance, double max_time, double max_speed) {
         // pros::lcd::print(6, "Elapsed: %.1f, Distance: %.1f, in loop", elapsed, distanceSensor.get());
     }
 }
+
+double calc_distance_from_wall(double target_distance_cm) {
+  double distance_from_wall = distanceSensor.get();
+  double distance_to_move_back_mm = (target_distance_cm - distance_from_wall);
+  double distance_to_move_back_in = distance_to_move_back_mm / 25.4;
+    return distance_to_move_back_in;
+}
