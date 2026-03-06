@@ -25,10 +25,11 @@ void awp_1(bool run_right_side) {
 
   /// ### 2. Outtake from loader ###
 
-  intaker.intake(127);
+  intaker.intake(100); // slower is more consistent for intaking from loader
   // distance_with_oscillation(195, 3400, oscillation_speed, oscillation_delta);
   drive_to_distance(200, 500, 50);
   oscillate_between(200, 250, 30, 30, 2500);
+
   /*
    * When the robot can successfully intake all balls from loader and outtake into goal,
    * The move back value was: -12_in
@@ -46,10 +47,10 @@ void awp_1(bool run_right_side) {
 
   // chassis.pid_drive_set(-12_in, DRIVE_SPEED, true);
   chassis.pid_drive_set(-(distance_to_move_back_in), DRIVE_SPEED, true);
+  scraper.close(); // close scraper earlier to prevent ball getting darg during turn
   chassis.pid_wait();
   intaker.stop();
-  scraper.close();
-
+  // scraper.close(); 
   double after_move_back = distanceSensor.get();
 
   pros::lcd::print(5, "Before: %.1f, After: %.1f", before_move_back, after_move_back);
@@ -57,9 +58,11 @@ void awp_1(bool run_right_side) {
   /// ### 3. Drive to long goal ###
 
   chassis.pid_turn_set(90_deg * negate_angle, TURN_SPEED * 0.8);
+  // intaker.intake(75); // keep balls loose
   chassis.pid_wait();
   raiser.raise(127);
-  pros::delay(600);  // Wait for raiser to raise
+  intaker.intake(127); // keep balls loose to prevent stuck
+  pros::delay(500);  // Wait for raiser to raise
   chassis.pid_drive_set(15_in, 75, true);
   chassis.pid_wait();
   intaker.outtake(127);
@@ -73,17 +76,17 @@ void awp_1(bool run_right_side) {
   raiser.lower(127);
   chassis.pid_turn_set(138_deg * negate_angle, TURN_SPEED * 0.8);
   chassis.pid_wait();
-  intaker.intake(100);
-  chassis.pid_drive_set(17_in, DRIVE_SPEED, true);
+  intaker.intake(80);
+  chassis.pid_drive_set(16_in, DRIVE_SPEED, true);
   raiser.lower(50);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(10_in, 25); // minimize 20 speed to drive 10_in
+  chassis.pid_drive_set(11_in, 25); // minimize 20 speed to drive 10_in
   chassis.pid_wait();
   // intaker.stop();
   raiser.stop();
 
-  /// ### 5. Outtake balls to center high goal ###
+  /// ### 5. Outtake balls to center goal ###
 
   chassis.pid_drive_set(12_in, DRIVE_SPEED, true);
   // raiser.raise(25);

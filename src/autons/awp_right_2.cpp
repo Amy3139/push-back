@@ -15,13 +15,11 @@ void awp_right_2() {
   chassis.pid_wait();
 
   raiser.lower(25);
-  intaker.intake(127);
+  intaker.intake(100);
   chassis.pid_drive_set(8_in, 40, true);
   chassis.pid_wait();
   chassis.pid_drive_set(10_in, 30, true);
   chassis.pid_wait();
-  // chassis.pid_drive_set(8_in, 20, true);
-  // chassis.pid_wait();
   raiser.stop();
 
   //
@@ -30,22 +28,19 @@ void awp_right_2() {
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  // raiser.raise(25);
-  // raiser.stop();
   chassis.pid_drive_set(11_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  // raiser.lower(25);
-  // intaker.outtake(70);
-  // pros::delay(500);
+  intaker.outtake(100);
+  pros::delay(200);
   intaker.outtake(127);
-  pros::delay(1000);
+  pros::delay(800);
   intaker.stop();
 
   //
   // #3. Outtake balls from loader
   //
-  chassis.pid_drive_set(-43_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-42_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   chassis.pid_turn_set(-180_deg, TURN_SPEED * 0.8);
   chassis.pid_wait();
@@ -67,17 +62,19 @@ void awp_right_2() {
   double before_move_back = distanceSensor.get();
 
   chassis.pid_drive_set(-(distance_to_move_back_in), DRIVE_SPEED, true);
+  scraper.close(); // close scraper earlier to prevent ball getting darg during turn
   chassis.pid_wait();
   intaker.stop();
-  scraper.close();
+  // scraper.close();
   chassis.pid_turn_set(2_deg, TURN_SPEED * 0.8);
   chassis.pid_wait();
 
   raiser.raise(127);
+  intaker.intake(127); // keep balls loose to prevent stuck
   pros::delay(500);  // Wait for raiser to raise
   chassis.pid_drive_set(15_in, 75, true);
   chassis.pid_wait();
   intaker.outtake(127);
-  pros::delay(1800);  // Wait for balls to outtake. Save time
+  pros::delay(1500);  // Wait for balls to outtake.
   intaker.stop();
 }
