@@ -17,6 +17,7 @@ void awp_left_2();
 void awp_left_3();
 void awp_right_1();
 void awp_right_2();
+void awp_right_3();
 void skills_1();
 void skills_2();
 void skills_3();
