@@ -5,9 +5,9 @@
 // AWP right side: center goal then long goal (no loader)
 ///
 void awp_right_2() {
-  //
-  // #1. Get 3 balls
-  //
+
+  /// ### 1. Get 3 balls ###
+  /// ###
   chassis.pid_drive_set(11_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
@@ -22,9 +22,8 @@ void awp_right_2() {
   chassis.pid_wait();
   raiser.stop();
 
-  //
-  // #2. Outtake 3 balls into center goal
-  //
+  /// ### 2. Outtake 3 balls into center goal ###
+  /// ###
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait();
 
@@ -37,9 +36,8 @@ void awp_right_2() {
   pros::delay(800);
   intaker.stop();
 
-  //
-  // #3. Outtake balls from loader
-  //
+  /// ### 3. Outtake balls from loader ###
+  /// ###
   chassis.pid_drive_set(-42_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   chassis.pid_turn_set(-180_deg, TURN_SPEED * 0.8);
@@ -51,12 +49,8 @@ void awp_right_2() {
   drive_to_distance(200, 500, 50);
   oscillate_between(200, 250, 30, 30, 2500);
 
-  //
-  // # 4. Outtake to long goal
-  // #
-
-  // double before_move_back = distanceSensor.get();
-
+  /// ### 4. Outtake to long goal ###
+  /// ###
   double distance_to_move_back_in = calc_distance_from_wall(560);
   chassis.pid_drive_set(-(distance_to_move_back_in), DRIVE_SPEED, true);
   scraper.close(); // close scraper earlier to prevent ball getting darg during turn
