@@ -46,7 +46,7 @@ void awp_right_1() {
 
   /// ### 4. Drive to intake balls at center ###
   /// ###
-  chassis.pid_drive_set(-14_in, 75);
+  chassis.pid_drive_set(-12_in, 75);
   chassis.pid_wait();
   raiser.lower(127);
   chassis.pid_turn_set(-138_deg, TURN_SPEED * 0.8);
@@ -62,7 +62,7 @@ void awp_right_1() {
 
   /// ### 5. Outtake balls to center goal ###
   /// ###
-  chassis.pid_drive_set(19_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(12_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   intaker.outtake(100); // start slower to increase chance of call staying in goal
   pros::delay(200);
